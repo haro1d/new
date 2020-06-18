@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>注册</title>
+    <style>
+      .wrap {
+              position: fixed;
+              left: 0;
+              top: 0;
+              width: 100%;
+              height: 100%;
+              background: url("./big3.jpg") no-repeat;
+              background-size: 100% 100%;
+    
+      }
+      .centerC{
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        text-align:right;
+        
+          /* align-items: right; */
+        
+        
+        
+      }
+      .centerC h2{ 
+        position: relative;
+        text-align: center;
+        bottom: 40px;
+        left:26px;
+        letter-spacing: 10px;
+        font-size: 32px;
+        font-family: 楷体;
+      }
+      .centerC input{
+      
+         font-size:16px;
+        color:rgb(240, 242, 255);
+         /* letter-spacing: 1px; */
+          margin-bottom: 60px;
+         border:none;
+        border-bottom: 1px solid #fff;
+        
+        outline:none;
+        background: transparent;
+        
+        /* width: 100%; */
+         padding:5px 5px;
+      }
+      .centerC  label{
+         position: relative;
+         top:0px;
+         left:0px;   
+         font-size: 18px;
+         color:#fff;
+         /* text-shadow: 1px 0px rgb(255, 193, 193); */
+        /* pointer-events:none;
+        transition:.5s; */
+     }
+     .br1{
+        /* height:0px ; */
+        /* position: relative; */
+
+        display:flex;
+     }
+     .submit{
+       position: absolute;
+       /* margin-left:510px;
+       margin-top: 510px;  */
+       margin-right:0px;
+       bottom: 0px;
+     }
+     .apple1{
+       width: 24px;
+       height: 24px;
+       position: absolute;
+       right:514px;
+       top:310px;
+     }
+     .apple2{
+       width: 24px;
+       height: 24px;
+       position: absolute;
+       right:514px;
+       top:402px;
+     }
+     input::-webkit-input-placeholder {
+       color: rgb(230, 175, 175);
+       text-shadow: 1px 1px rgb(0, 0, 0);
+        font-weight: 900;
+        font-style: italic;
+      }
+       
+      </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div id="app">
+        <div class="centerC">
+          <h2>注册</h2>
+          
+          
+            <label>昵称</label>
+          <input  type="text" v-model="iName">
+          <div class="br1"></div>
+
+          
+            <label>密码</label>
+          <input  type="password" v-model="pw1" placeholder="不少于6位" >
+          
+         <div class="br1"> </div>
+
+          
+            <label>确认密码</label>
+          <input  type="password" v-model="pw2">
+          <div class="br1"></div>
+
+          
+            <label>手机号码</label>
+          <input  type="text" v-model="phone">
+          <div class="br1"></div>
+          
+        
+        <div><button class="submit"><i>提交</i></button></div>
+
+      </div>
+      <img src=./ok.png v-if="pw1.length>5"  class="apple1"></img>
+      <img src=./ok.png v-if="pw1==pw2 && pw1.length>5 && pw1!=''"  class="apple2"></img>
+    </div>
+    </div>
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 编码 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js">
+</script>
+<script>
+  // 创建Vue实例
+  var app = new Vue({
+    el: "#app",
+    data:{
+      iName:"",
+      pw2:"",
+      pw1:"",
+      phone:"",
+    },
+    methods:{
+
+    }
+
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>K-music</title>
+    <link rel="stylesheet" href="./musicCss/index.css">
+  </head>
+  <body>
+    <br><br>
+    <div id="player">
+  
+    <div class="wrap">
+      <div v-show="judge">
+        <div class="box">    
+          <h2>登录</h2>
+          <form >
+              <div class="inputbox">
+                  <input type="text" name="" required="" v-model="iName" onKeyUp="value=value.replace(/[\W]/g,'')" placeholder="         只允许输入数字和字母">
+                  <label>用户名</label>
+              </div>
+              <div class="inputbox">
+                  <input type="password" name="" required="" v-model="pw">
+                  <label>密码</label>
+              </div>
+              <input type="button"  value="提交"  :disabled="iName=='' && pw=='' " @click="Log_in" >
+          </form>
+        </div>
+</div>
+
+            
+     <img src="./书法.png" />
+     <img src="./qq.png"  class="qaq"/>
+
+      
+ 
+        
+        <div class="firS">
+
+        <!-- 原始内容 -->      
+         <div class="search1">
+  
+          <img src="./b.png" alt="" />
+            <input type="text" v-model="songsName"  @keyup.enter="songList" placeholder="请输入歌名/歌手" >
+            
+            <button @click="songList">搜索</button>
+
+            <div class="common"> 
+              <div v-show="ifLog" class="UserInfo">
+                <img  src="./b.jpg" alt="" />
+                <h5>{{iName}}</h5>
+              </div>
+              <!-- <button @click="tt">true</button>
+              <button @click="ff">false</button> -->
+                  <button class="commonA" v-show="ifLog==false"  @click="jg">登录</button>
+                  <button class="commonA" v-show="ifLog==true"  @click="log_off">注销</button>
+                
+                  <a href="./register.html">
+                    <button class="commonB">注册</button>
+                  </a>
+             </div>
+         </div>
+   
+        
+          
+          <!-- 搜索之后出现的内容 -->
+          <div class="center_con">
+            <div :class="{playing:ifPlay}  ">
+            <!-- <div v-show="ifPlay" class="colorBorder" > -->
+              <img src="yuan.png"   class="mCoverCss2  cover autoRotate" />
+              <img :src="mCover" v-if="mCover!=[]"  class="mCoverCss  cover autoRotate" />
+                
+            <!-- </div> -->
+            </div>
+            
+            <div class="songList1"> 
+                
+              <ul class="songList2">
+                
+                <li v-for="item in sList">
+                  
+                  <a href="javascript:;" @click="playMusic(item.id)">{{item.name}}</a>
+                  <b> {{item.artists[0].name}}</b>
+                  <button v-if="item.mvid!=0" @click="playMv(item.mvid)"><i>mv</i></button>
+                  
+                </li>
+              </ul>
+              <div v-show="ifMv">
+               
+              <video ref='video' :src="mvUrl" controls="controls" class="mv1"></video>
+              <button class="closeMv" @click="ifMv=false">关闭MV</button>
+                
+            </div>
+              
+          <!-- 播放器 -->
+            <div class="kAudio">
+              <audio ref='audio' @pause="pause1" @play="play1" :src='mUrl' controls autoplay loop class="myaudio" ></audio>
+            </div>
+         
+            <!-- 评论区 -->
+
+            <div class="comment_wrapper" ref='comment_wrapper'>
+              <h5 class='title'>热门留言</h5>
+              <div class='comment_list'>
+    
+                <dl v-for="item in hotC">
+                  <dt>
+                    <img :src="item.user.avatarUrl" alt="" />
+                  </dt>
+                  <dd class="name">{{item.user.nickname}}</dd>
+                  <dd class="detail">
+                    {{item.content}}
+                  </dd>
+                </dl>
+              </div>
+              
+            </div>
+          </div>
+          
+          </div>
+      </div>
+    </div>
+  
+  </div>
+
+
+
+<!-- 开发环境版本，包含了有帮助的命令行警告 -->
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<!-- 编码 -->
+<script src="https://unpkg.com/axios/dist/axios.min.js">
+</script>
+<script>
+  // 创建Vue实例
+  var app = new Vue({
+    el: "#player",
+    data:{
+        songsName:"",
+        sList:[],
+        mUrl:"",
+        mCover:"",
+        hotC:[],
+        ifPlay:false,
+        mvUrl:"",
+        ifMv:false,
+        judge:false,
+        iName:"",
+        ifLog:false,
+        pw:""
+        // logOff:false
+    },
+    methods:{
+        Log_in(){
+            this.ifLog=true;
+            this.judge=false;
+            console.log(this.ifLog)
+        },
+        jg(){
+            this.judge=true
+            //console.log(this.judge)
+        },
+        log_off(){
+            this.ifLog=false
+            this.logOff=false
+            //console.log(this.judge)
+        },
+        songList(){
+            var that =this;
+            axios.get("https://autumnfish.cn/search?keywords="+this.songsName)
+            // axios.get("https://c.y.qq.com/v8/fcg-bin/fcg_v8_toplist_cp.fcg?g_tk=5381&uin=0&format=json&inCharset=utf-8&outCharset=utf-8&notice=0&platform=h5&needNewCode=1&tpl=3&page=detail&type=top&topid=27&_=1519963122923")
+            .then(function(res){
+              // console.log(res)
+              that.sList=res.data.result.songs
+              // console.log(that.sList)
+            })
+            .catch(function(err){
+
+            })
+
+        },
+        playMusic(mId){
+        var that=this;
+        axios.get("https://autumnfish.cn/song/url?id="+mId)    
+            .then(function(res){
+              // console.log(res);
+              // console.log(res.data.data)
+              that.mUrl=res.data.data[0].url
+            },
+            function(err){})   
+        axios.get("https://autumnfish.cn/song/detail?ids="+mId)
+            .then(function(res){
+              // console.log(res.data.songs[0].al.picUrl);
+              that.mCover=res.data.songs[0].al.picUrl
+            },function(err){})
+        axios.get("https://autumnfish.cn/comment/hot?type=0&id="+mId)
+            .then(function(res){
+              that.hotC=res.data.hotComments;
+              console.log(res.data.hotComments);
+            },function(err){})
+         },
+         playMv(mvid){
+           var that =this;
+           axios.get("https://autumnfish.cn/mv/url?id="+mvid)
+           .then(function(res){
+              that.mvUrl=res.data.data.url
+              that.ifMv=true
+           },function(res){})
+         }
+         ,
+         pause1(){
+           this.ifPlay=false
+         },
+         play1(){
+           this.ifPlay=true
+         },
+        
+
+    }
+
+  }
+  )
+</script>
+</body>
+</html>
+
