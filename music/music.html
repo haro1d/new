@@ -16,6 +16,7 @@
     <div class="wrap">
       <div v-show="judge">
         <div class="box">    
+          <span class="closeJg" @click="cjg">X</span>
           <h2>登录</h2>
           <form >
               <div class="inputbox">
@@ -88,16 +89,11 @@
                   
                 </li>
               </ul>
-              <div v-show="ifMv">
-               
-              <video ref='video' :src="mvUrl" controls="controls" class="mv1"></video>
-              <button class="closeMv" @click="ifMv=false">关闭MV</button>
-                
-            </div>
+
               
           <!-- 播放器 -->
             <div class="kAudio">
-              <audio ref='audio' @pause="pause1" @play="play1" :src='mUrl' controls autoplay loop class="myaudio" ></audio>
+              <audio ref='audio' id='music' @pause="pause1" @play="play1" :src='mUrl' controls autoplay loop class="myaudio" ></audio>
             </div>
          
             <!-- 评论区 -->
@@ -118,6 +114,12 @@
               </div>
               
             </div>
+          </div>
+          <div v-if="ifMv" class="mv1_father">
+               
+            <video ref='video' :src="mvUrl" controls="controls" class="mv1"></video>
+            <button class="closeMv" @click="ifMv=false">关闭MV</button>
+              
           </div>
           
           </div>
@@ -152,6 +154,7 @@
         pw:""
         // logOff:false
     },
+   
     methods:{
         Log_in(){
             this.ifLog=true;
@@ -161,6 +164,9 @@
         jg(){
             this.judge=true
             //console.log(this.judge)
+        },
+        cjg(){
+          this.judge=false;
         },
         log_off(){
             this.ifLog=false
@@ -205,8 +211,9 @@
            var that =this;
            axios.get("https://autumnfish.cn/mv/url?id="+mvid)
            .then(function(res){
-              that.mvUrl=res.data.data.url
-              that.ifMv=true
+              that.mvUrl=res.data.data.url;
+              that.ifMv=true;
+              document.getElementById('music').pause();
            },function(res){})
          }
          ,
